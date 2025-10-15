@@ -24,6 +24,7 @@ installButton.addEventListener('click', async () => {
     deferredPrompt = null;
   }
 });
+
 // Ховаємо кнопку, якщо додаток вже встановлено
 window.addEventListener('appinstalled', () => {
   installButton.classList.add('hidden');

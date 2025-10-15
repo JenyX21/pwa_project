@@ -1,36 +1,38 @@
-const CACHE_NAME = 'pwa-example-v1';
-// Список файлів, які потрібно закешувати
+const CACHE_NAME = 'test-pwa-v2'; // Оновлюємо версію кешу
+
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
   '/app.js',
+  '/install.html',      
+  '/install.css',       
+  '/install.js',        
   '/icons/icon-192.png',
   '/icons/icon-512.png'
 ];
 
-// 1. Подія 'install' - кешування статичних файлів
+// 1. Встановлення Service Worker: кешуємо файли
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Відкрито кеш');
+        console.log('Кеш відкрито, додаємо файли...');
         return cache.addAll(urlsToCache);
       })
   );
 });
 
-// 2. Подія 'fetch' - перехоплення запитів
+// 2. Перехоплення запитів: віддаємо файли з кешу, якщо вони там є
 self.addEventListener('fetch', event => {
   event.respondWith(
-    // Шукаємо відповідь у кеші
     caches.match(event.request)
       .then(response => {
-        // Якщо ресурс є в кеші, повертаємо його
+        // Якщо запит є в кеші, повертаємо його
         if (response) {
           return response;
         }
-        // Інакше, робимо запит до мережі
+        // Інакше, робимо звичайний запит до мережі
         return fetch(event.request);
       })
   );
